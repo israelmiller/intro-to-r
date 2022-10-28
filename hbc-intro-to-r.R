@@ -3,7 +3,7 @@
 #Exercises were completed at the bottom of each section.
 
 
-####1.1 intro r
+####1.1: intro r
 
     #Variables are declared with the assignment operator, <-
     x <- 4
@@ -12,7 +12,7 @@
     number <- x+y
     #print(number)
 
-####1.2 R Syntax and Data Structures
+####1.2: R Syntax and Data Structures
 
     ###Vectors
     #The c (combine) function is used to create vectors. 
@@ -78,7 +78,7 @@
     list2 <- list(species, glengths, number)
     #print(list2)
 
-####1.3 R Functions and Arguments
+####1.3: R Functions and Arguments
     #"A function is a self-contained piece of code that performs a specific task."
     #The function name is followed by parentheses, which contain the arguments.
 
@@ -130,7 +130,7 @@
     }
     #print(multiply_it(2, 3))
 
-####1.4 Reading data into R 
+####1.4: Reading data into R 
 
     #the read.csv() function is used to read data from a csv file into R
     metadata <- read.csv(file="data/mouse_exp_design.csv")
@@ -171,7 +171,7 @@
     #print(length(colnames(proj_summary)))
     #Answer: 8
 
-####1.5Practice Exercises
+####1.5: Practice Exercises
     #Custom Functions - Let’s create a function temp_conv(), which converts the temperature in Fahrenheit (input) to the temperature in Kelvin (output).
     #   We could perform a two-step calculation: first convert from Fahrenheit to Celsius, and then convert from Celsius to Kelvin.
     #   The formula for these two calculations are as follows: temp_c = (temp_f - 32) * 5 / 9; temp_k = temp_c + 273.15. To test your function,
@@ -242,10 +242,95 @@
         #Extract only elements from samplegroup that are not KO.
         #print(samplegroup[samplegroup!="KO"])
     #Releveling factors
+        expression <- factor(expression, levels=c("low", "medium", "high"))
+        #str(expression)
         
-
-
+        #Exercise
+        #Use the samplegroup factor we created in a previous lesson, and relevel it such that KO is the first level followed by CTL and OE.
+        samplegroup <- factor(samplegroup, levels=c("KO", "CTL", "OE"))
+        #str(samplegroup)
+####2.2: Packages and Libraries
+    #Checking what is loaded
+        #You can check which packages are currently loaded by using the sessionInfo() or search() functions.
+        #print(sessionInfo())
+        #print(search())
+    #Installing new packages
+        #packages can be installed from the CRAN package repository using the install.packages() function.        
+        #install.packages("ggplot2")
         
+        #Many packages also exist on Bioconductor, which is a repository for bioinformatics packages.
+        #To install a package from Bioconductor, you need to use the BiocManager package.
+        #install.packages("BiocManager")
+        #to install a package from Bioconductor, use the following code:
+        #BiocManager::install("ggplot2")
+        #The :: is used to specify that the function should be executed from a specific package.
+    #Loading packages
+        #To load a package, use the library() function.
+        #library(ggplot2)
+        #this is like import in Python
+    #Exercise
+        #Install the tidyverse suite of packages from CRAN.
+        #install.packages("tidyverse")
 
+####2.3: Data wrangling: dataframes, matrices, and lists
+    #Dataframes
+        #extract the value "Wt" from the first column and first row of metadata dataframe
+            #print(metadata[1,1])
+        #extract the value from 1st row of the 3rd column of metadata dataframe
+            #print(metadata[1,3])
+        #Extract the 3rd row from the metadata dataframe
+            #print(metadata[3,])
+            #if you select a single row, the output is a dataframe
+        #Extract the 3rd column from the metadata dataframe
+            #print(metadata[,3])
+            #if you select a column, the output is a vector
+        #Extract the 3rd column as a dataframe using the drop=FALSE argument
+            #print(metadata[,3,drop=FALSE])
+        #Create a dataframe containing the first two columns of metadata
+            #print(metadata[,1:2])
+        #Create a dataframe containing the 1st, 3rd, and 6th rows of metadata
+            #print(metadata[c(1,3,6),])
+        #Extract the celltype column from the first 3 samples
+            #print(metadata[c("sample1", "sample2", "sample3") , "celltype"])
+        #if you want to extract a column using the column name, you can use the $ operator
+            #print(metadata$genotype)
+                #there is no equivalent operator for rows
+    #Exercises
+        #Return a data frame with only the genotype and replicate column values for sample2 and sample8.
+            #print(metadata[c("sample2", "sample8"), c("genotype", "replicate")])
+        #Return the fourth and ninth values of the replicate column.
+            #print(metadata[c(4,9), "replicate"])
+        #Extract the replicate column as a data frame.
+            #print(metadata[, "replicate", drop=FALSE])
+    #Selecting indicies with logical operators
+        #print(metadata$celltype=="typeA")
+        #returns a vector of logical values
+        #print(metadata[metadata$celltype=="typeA",])
+        #returns a dataframe with only the rows that meet the condition
+        #which can be used to subset the dataframe
+        #print(which(metadata$celltype=="typeA"))
+        #returns the indices of the rows that meet the condition
+    #Lists
+        #to select a single element from a list, you need to use the double square brackets
+       #print(list1[[2]])
+        #you can use the class function to check the type of an object
+        #print(class(list1[[2]]))
+        
+        #exercise
+        #Create a list named random with the following components: metadata, age, list1, samplegroup, and number.
+            random <- list(metadata=metadata, age=age, list1=list1, samplegroup=samplegroup, number=number)
+            #print(random)
+        #Extract the samplegroup component.
+            #print(random$samplegroup)
+    #Adding names to lists
+        #you can use the names function to add names to a list
+        names(list1) <- c("species", "df", "number")
+        #print(names(list1))
+        #once you have named a list, you can use the names to extract elements
+        #print(list1[["species"]])
 
-
+        #exercise
+            #Set names for the random list you created in the last exercise.
+            names(random) <- c("metadata", "age", "list1", "samplegroup", "number")
+            #Extract the age component using the $ notation
+            #print(random$age)
